@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from tasks.models import Task
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
