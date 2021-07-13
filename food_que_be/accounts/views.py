@@ -4,6 +4,7 @@ from tasks.serializers import TaskSerializer
 from rest_framework import status, exceptions
 from accounts.models import User
 from accounts.serializers import UserSerializer
+from rest_framework_simplejwt.tokens import RefreshToken
 
 
 
@@ -24,12 +25,23 @@ def login_user_api(request):
     username = request.data.get("username")
     password = request.data.get("password")
 
-    user = User.objects.get(username=username)
+    if not username or not password:
+        raise exceptions.AuthenticationFailed
 
-    if user is None:
+    try:
+        user = User.objects.get(username=username)
+    except User.DoesNotExist:
         raise exceptions.AuthenticationFailed("user not found")
+
+    # if user is None:
+    #     raise exceptions.AuthenticationFailed("user not found")
     if not user.check_password(password):
         raise exceptions.AuthenticationFailed("password is not a match")
 
+    refresh = RefreshToken.for_user(user)
+ 
 
-    return Response("login")
+    return Response({
+        'refresh': str(refresh),
+        'access': str(refresh.access_token),
+    })  
