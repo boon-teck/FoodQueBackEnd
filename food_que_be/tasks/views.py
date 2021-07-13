@@ -45,4 +45,4 @@ def edit_task(request,taskid):
 def delete_task(request, taskid):
     task = Task.objects.get(pk=taskid)
     task.delete()
-    return Response(status=status.HTTP_204_NO_CONTENT)
+    return Response("task deleted", status=status.HTTP_204_NO_CONTENT)
