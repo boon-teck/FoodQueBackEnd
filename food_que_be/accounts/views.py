@@ -5,6 +5,30 @@ from rest_framework import status, exceptions
 from accounts.models import User
 from accounts.serializers import UserSerializer
 from rest_framework_simplejwt.tokens import RefreshToken
+ 
+
+# @api_view(['GET'])
+def get_user_api(request): 
+    try:
+        user = User.objects.get(pk=request.user.id)
+    except:
+        return Response(
+            {"detail": "missing visitor"}, status=status.HTTP_401_UNAUTHORIZED
+        )
+
+    serialized_user = UserSerializer(user, many=False)
+    print(serialized_user)
+    print(serialized_user.data["visited"][0].__dict__)
+    return Response(serialized_user.data, status=status.HTTP_200_OK)
+    # print(request.user)
+    # # serializer = UserSerializer(request.user)
+    # # return Response(serializer.data)
+    # return Response("ok")
+
+    # user = User.objects.get(pk=id)
+    # print(user)
+    # serializer = UserSerializer(user, many=False)
+    # return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
 
 
 
