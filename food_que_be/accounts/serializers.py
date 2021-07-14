@@ -8,8 +8,6 @@ class UserSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         user = super().create(validated_data)
-        user.is_visitor = True
-        user.is_company = False
         # this is for hashing password
         user.set_password(validated_data["password"])
         user.save()
