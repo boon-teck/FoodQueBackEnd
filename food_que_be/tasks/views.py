@@ -13,6 +13,19 @@ def all_tasks(request):
     serializer = TaskSerializer(tasks, many=True)
     return Response(serializer.data)
 
+#user submitted tasks
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def user_tasks(request):
+    print('test', request.user.id)
+    tasks = Task.objects.filter(user=request.user)
+    print(tasks)
+    serializer = TaskSerializer(tasks, many=True)
+    print(serializer)
+    return Response(serializer.data)
+
+
+
 @api_view(['GET'])
 # @permission_classes([IsAuthenticated])
 def show_task(request, id):
@@ -52,3 +65,4 @@ def delete_task(request, taskid):
     task = Task.objects.get(pk=taskid)
     task.delete()
     return Response("task deleted", status=status.HTTP_204_NO_CONTENT)
+

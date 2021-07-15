@@ -1,6 +1,7 @@
 from django.db import models
 from django.db.models.fields import DateTimeField
 import uuid
+from accounts.models import User
 
 # Create your models here.
 class Task(models.Model):
@@ -14,6 +15,15 @@ class Task(models.Model):
     cost_of_food = models.IntegerField()
     budget = models.IntegerField()
     is_completed = models.BooleanField(default=False)
+    buy_from = models.CharField(max_length=100, blank = True)
+    deliver_to = models.CharField(max_length=100, blank = True)
     
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="tasks", blank=True)
+
+
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
